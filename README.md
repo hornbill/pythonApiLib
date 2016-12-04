@@ -20,7 +20,7 @@ xmlmc.set_api_key("<your API key>")
 
 //-- Invoke session::getSessionInfo
 json_string = xmlmc.invoke("session", "getSessionInfo")
-
+```
 
 Using user ID and password
 ===
@@ -41,17 +41,17 @@ json_string = xmlmc.Invoke("session", "userLogon");
 //-- Get SessionId from the API Response
 if XmlmcHelper.is_call_success(json_string):
 	session_id = XmlmcHelper.get_param_value(json_string, "params/sessionId")
-
+```
 
 Example
 ===
 
 An example has been provided here:
-https://github.com/hornbill/pythonApiLib/blob/master/
+https://github.com/hornbill/pythonApiLib/tree/master/python_api_lib
 
 The following file needs to be updated to include your instance details:
 
-https://github.com/hornbill/dotNetApiLib/blob/master/example.py
+https://github.com/hornbill/pythonApiLib/blob/master/python_api_lib/example.py
 
 
 These strings need to be updated:
