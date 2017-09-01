@@ -10,9 +10,9 @@ Dependancys
 ===
 This library requires the python library lxml (http://lxml.de/)
 
-Pip can be used to install this library
+Pip can be used to install this library:
 
-```pip get lxml```
+```pip install lxml```
 
 
 Using API Keys 
