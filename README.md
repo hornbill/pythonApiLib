@@ -6,6 +6,14 @@ Integration
 ===
 Various Hornbill Integration methods are documeted here: https://wiki.hornbill.com/index.php/Integration
 
+Dependancys
+===
+This library requires the python library lxml (http://lxml.de/)
+
+Pip can be used to install this library
+
+```pip get lxml```
+
 
 Using API Keys 
 ===
