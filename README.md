@@ -8,13 +8,11 @@ Various Hornbill Integration methods are documeted here: https://wiki.hornbill.c
 
 Dependancys
 ===
-This library requires the python library lxml (http://lxml.de/)
+This library requires the python library lxml (http://lxml.de/) and requests
 
-Pip can be used to install this library:
+Pip can be used to install these librarys:
 
-```pip install lxml```
-
-```pip install requests```
+```pip install lxml requests```
 
 
 Using API Keys 
