@@ -13,6 +13,7 @@ This library requires the python library lxml (http://lxml.de/)
 Pip can be used to install this library:
 
 ```pip install lxml```
+
 ```pip install requests```
 
 
