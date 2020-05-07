@@ -1,4 +1,5 @@
 from lxml import etree
+from typing import List
 import base64
 import requests
 import exception
@@ -109,7 +110,12 @@ class XmlmcService(object):
             return None
         return "https://{0}api.hornbill.com/{1}".format(zone_info["zone"].replace("", "_"), zone_info["name"])
 
-    def add_param(self, key, value):
+    def add_param(self, key, value=''):
+        """
+        :param key: name of the parameter
+        :param value:  value of the parameters
+        :return: return XmlmcParam object
+        """
         if not key or key.isspace():
             return None
         param = XmlmcParam(str(key), str(value))
@@ -123,6 +129,13 @@ class XmlmcService(object):
         print('\n'.join(str(p) for p in self.params))
 
     def invoke(self, service, method):
+        def addParamElements(p):
+            elem = etree.Element(str(p.key))
+            elem.text = p.value
+            for c in p.childs():
+                elem.append(addParamElements(c))
+            return elem
+
         if not self._server_endpoint_ or self._server_endpoint_.isspace():
             if not self._instance_name_ or self._instance_name_.isspace():
                 raise exception.IllegalArgumentError("You must specify either the server URL or instance name.")
@@ -142,12 +155,10 @@ class XmlmcService(object):
             param_elem = etree.Element("params")
             root_elem.append(param_elem)
             for param in self.params:
-                elem = etree.Element(param.key)
-                elem.text = param.value
+                elem = addParamElements(param)
                 param_elem.append(elem)
 
         xml_body = str(etree.tostring(root_elem, encoding='utf8', method='xml'))
-
         self.clear_params()
 
         url = urljoin(self.get_server_endpoint(), self.get_gateway(), service) + "/"
@@ -160,6 +171,8 @@ class XmlmcService(object):
 
 
 class XmlmcParam(object):
+    _childs = None
+
     def __init__(self):
         self.key = None
         self.value = None
@@ -168,6 +181,20 @@ class XmlmcParam(object):
         self.key = k
         self.value = v
 
+    def __str__(self):
+        c = ''
+        if self._childs is not None and len(self._childs) > 0:
+            c = ''.join('\n{0}'.format(str(p)) for p in self._childs)
+        return '<{0}>{1}{2}{3}</{0}>'.format(self.key, self.value, c, '\n' if len(c) else '')
+
+    def add_child(self, k, v=''):
+        if not k or k.isspace():
+            return None
+        _childs = self.childs()
+        param = XmlmcParam(str(k), str(v))
+        _childs.append(param)
+        return param
+
     def encode(self, val):
         if not self.value and self.value.isspace():
             return
@@ -175,3 +202,14 @@ class XmlmcParam(object):
             self.value = base64.b64encode(bytes(self.value, 'utf-8'))
             return
         warnings.warn("\'" + val + " \'encoding is not implemented.")
+
+    def childs(self):
+        """ return list of XmlmcParam objects """
+        if self._childs is None:
+            self._childs = list()
+        return self._childs
+
+    def clear_childs(self):
+        self._childs = list()
+
+
