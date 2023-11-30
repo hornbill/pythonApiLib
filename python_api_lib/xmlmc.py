@@ -104,6 +104,8 @@ class XmlmcService(object):
             return None
 
         zone_info = json_string["zoneinfo"]
+        if "apiEndpoint" in zone_info:
+            return zone_info["apiEndpoint"]
         if "endpoint" in zone_info:
             return zone_info["endpoint"]
         if "name" not in zone_info or "zone" not in zone_info:
